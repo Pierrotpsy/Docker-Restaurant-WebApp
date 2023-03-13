@@ -14,7 +14,7 @@ services:
       - MONGO_DATA_DIR=/data/db
       - MONGO_LOG_DIR=/dev/null
     networks:
-      - app_net
+      - back_net
   import:
     build: .
     depends_on:
@@ -30,23 +30,26 @@ services:
     volumes:
       - ./data:/data
     networks:
-      - app_net
-  api:
+      - back_net
+  backend:
     build: ./API
     ports:
       - "5000:5000"
     depends_on:
       - db
     networks:
-      - app_net
+      - back_net
+      - front_net
   frontend:
     build: ./Frontend
     ports:
       - "8000:8000"
     depends_on:
-      - api
+      - backend
     networks:
-      - app_net
+      - front_net
 networks:
-  app_net:
+  back_net:
+    driver: bridge
+  front_net:
     driver: bridge

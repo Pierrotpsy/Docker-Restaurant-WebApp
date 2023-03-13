@@ -16,10 +16,11 @@ class RestaurantList(Resource):
         restaurants = [restaurant for restaurant in restaurants]
         for restaurant in restaurants:
             restaurant['_id'] = str(restaurant['_id'])
+        restaurants = restaurants[0]
         return jsonify({'restaurants': restaurants})
 
 
 api.add_resource(RestaurantList, '/restaurants')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000)
