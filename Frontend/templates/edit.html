@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Edit Restaurant</h1>
+<form method="POST" action="{{ url_for('edit', id=restaurant['_id']) }}">
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" class="form-control" id="name" name="name" value="{{ restaurant['name'] }}" required>
+    </div>
+    <div class="form-group">
+        <label for="cuisine">Cuisine:</label>
+        <input type="text" class="form-control" id="cuisine" name="cuisine" value="{{ restaurant['cuisine'] }}" required>
+    </div>
+    <div class="form-group">
+        <label for="borough">Borough:</label>
+        <input type="text" class="form-control" id="borough" name="borough" value="{{ restaurant['borough'] }}" required>
+    </div>
+    <div class="form-group">
+        <label for="street">Street:</label>
+        <input type="text" class="form-control" id="street" name="street" value="{{ restaurant['address']['street'] }}" required>
+    </div>
+    <div class="form-group">
+        <label for="building">Building:</label>
+        <input type="text" class="form-control" id="building" name="building" value="{{restaurant['address']['building'] }}" required>
+    </div>
+    <div class="form-group">
+        <label for="zipcode">Zipcode:</label>
+        <input type="text" class="form-control" id="zipcode" name="zipcode" value="{{ restaurant['address']['zipcode'] }}" required>
+    </div>
+    <div class="form-group">
+        <label for="longitude">Longitude:</label>
+        <input type="text" class="form-control" id="longitude" name="longitude" value="{{ restaurant['address']['coord'][0] }}" required>
+    </div>
+    <div class="form-group">
+        <label for="latitude">Latitude:</label>
+        <input type="text" class="form-control" id="latitude" name="latitude" value="{{ restaurant['address']['coord'][1] }}" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="/" class="btn btn-secondary">Cancel</a>
+
+</form>
+{% endblock %}

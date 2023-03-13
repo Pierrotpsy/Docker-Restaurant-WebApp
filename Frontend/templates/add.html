@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Add Restaurant</h1>
+<form method="POST" action="{{ url_for('add') }}">
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+    </div>
+    <div class="form-group">
+        <label for="cuisine">Cuisine:</label>
+        <input type="text" class="form-control" id="cuisine" name="cuisine" required>
+    </div>
+    <div class="form-group">
+        <label for="borough">Borough:</label>
+        <input type="text" class="form-control" id="borough" name="borough" required>
+    </div>
+    <div class="form-group">
+        <label for="street">Street:</label>
+        <input type="text" class="form-control" id="street" name="street" required>
+    </div>
+    <div class="form-group">
+        <label for="building">Building:</label>
+        <input type="text" class="form-control" id="building" name="building" required>
+    </div>
+    <div class="form-group">
+        <label for="zipcode">Zipcode:</label>
+        <input type="text" class="form-control" id="zipcode" name="zipcode" required>
+    </div>
+    <div class="form-group">
+        <label for="longitude">Longitude:</label>
+        <input type="text" class="form-control" id="longitude" name="longitude" required>
+    </div>
+    <div class="form-group">
+        <label for="latitude">Latitude:</label>
+        <input type="text" class="form-control" id="latitude" name="latitude" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>
+{% endblock %}

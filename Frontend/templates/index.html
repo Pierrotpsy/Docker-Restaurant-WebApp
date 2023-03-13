@@ -1,119 +1,60 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Restaurant List</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <style>
-    h1 {
-      text-align: center;
-      margin-top: 50px;
-    }
-    .restaurant-list {
-      margin-top: 30px;
-    }
-    .restaurant {
-      margin-top: 10px;
-      border: 1px solid black;
-      padding: 10px;
-    }
-    .btn-group {
-      margin-top: 10px;
-      display: flex;
-      flex-direction: row;
-    }
-    .btn-group button {
-      margin-right: 10px;
-    }
-  </style>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}
+Restaurant List
+{% endblock %}
+
+{% block head %}
+{{ super() }}
+<style>
+  h1 {
+    text-align: center;
+    margin-top: 50px;
+  }
+  .restaurant-list {
+    margin-top: 30px;
+  }
+  .restaurant {
+    margin-top: 10px;
+    border: 1px solid black;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .btn-group {
+    display: flex;
+    flex-direction: row;
+  }
+  .btn-group button {
+    margin-right: 10px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
 <div class="container">
   <h1>Restaurant List</h1>
   <div class="restaurant-list">
     {% for restaurant in restaurants %}
     <div class="restaurant">
-      <h2>{{ restaurant['name'] }}</h2>
-      <p>Address: {{ restaurant['address']['street'] }}, {{ restaurant['address']['city'] }}, {{ restaurant['address']['state'] }}</p>
-      <p>Cuisine: {{ restaurant['cuisine'] }}</p>
-      <p>Rating: {{ restaurant['rating'] }}</p>
-      <p>Id: {{ restaurant['_id'] }}</p>
-      <div class="btn-group">
-        <button class="btn btn-primary edit-restaurant" data-id="{{ restaurant['_id'] }}">Edit</button>
-        <button class="btn btn-danger delete-restaurant" data-id="{{ restaurant['_id'] }}">Delete</button>
+      <div>
+        <h2>{{ restaurant['name'] }}</h2>
+        <p>Address: {{ restaurant['address']['street'] }}, {{ restaurant['address']['city'] }}, {{ restaurant['address']['state'] }}</p>
+        <p>Cuisine: {{ restaurant['cuisine'] }}</p>
+        <p>Rating: {{ restaurant['rating'] }}</p>
       </div>
+      <div class="btn-group">
+        <form method="GET" action="{{ url_for('edit', id=restaurant['_id']) }}">
+          <button class="btn btn-primary edit-restaurant">Edit</button>
+        </form>
+        <form method="POST" action="{{ url_for('delete', id=restaurant['_id']) }}">
+          <button class="btn btn-danger delete-restaurant">Delete</button>
+        </form>
+      </div>
+
     </div>
     {% endfor %}
   </div>
-  <div class="add-restaurant">
-    <h2>Add Restaurant</h2>
-    <form>
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" class="form-control" id="name">
-      </div>
-      <div class="form-group">
-        <label for="street">Street</label>
-        <input type="text" class="form-control" id="street">
-      </div>
-      <div class="form-group">
-        <label for="city">City</label>
-        <input type="text" class="form-control" id="city">
-      </div>
-      <div class="form-group">
-        <label for="state">State</label>
-        <input type="text" class="form-control" id="state">
-      </div>
-      <div class="form-group">
-        <label for="cuisine">Cuisine</label>
-        <input type="text" class="form-control" id="cuisine">
-      </div>
-      <div class="form-group">
-        <label for="rating">Rating</label>
-        <input type="number" class="form-control" id="rating">
-      </div>
-      <button type="submit" class="btn btn-primary" id="add-restaurant-btn">Add</button>
-    </form>
-  </div>
-  <div class="edit-restaurant">
-    <h2>Edit Restaurant</h2>
-    <form>
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" class="form-control" id="edit-name">
-      </div>
-      <div class="form-group">
-        <label for="street">Street</label>
-        <input type="text" class="form-control" id="edit-street">
-      </div>
-      <div class="form-group">
-        <label for="city">City</label>
-        <input type="text" class="form-control" id="edit-city">
-      </div>
-      <div class="form-group">
-        <label for="state">State</label>
-        <input type="text" class="form-control" id="edit-state">
-      </div>
-      <div class="form-group">
-        <label for="cuisine">Cuisine</label>
-        <input type="text" class="form-control" id="edit-cuisine">
-      </div>
-      <div class="form-group">
-        <label for="rating">Rating</label>
-        <input type="number" class="form-control" id="edit-rating">
-      </div>
-      <input type="hidden" id="edit-restaurant-id">
-      <button type="submit" class="btn btn-primary" id="save-changes-btn">Save Changes</button>
-      <button type="button" class="btn btn-secondary" id="cancel-edit-btn">Cancel</button>
-    </form>
-  </div>
-  <div class="delete-restaurant">
-    <h2>Delete Restaurant</h2>
-    <form>
-      <div class="form-group">
-        <label for="delete-id">ID</label>
-        <input type="text" class="form-control" id="delete-id" readonly>
-      </div>
-      <button type="submit" class="btn btn-danger" id="delete-restaurant-btn">Delete</button>
-    </form>
-  </div>
-</body>
+</div>
+{% endblock %}
