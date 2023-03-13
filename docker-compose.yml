@@ -8,24 +8,43 @@ services:
       - ./data:/data/db
     command: mongod --bind_ip_all --auth
     environment:
-      - MONGO_INITDB_DATABASE=restaurants
+      - MONGO_INITDB_DATABASE=test
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=admin123
       - MONGO_DATA_DIR=/data/db
       - MONGO_LOG_DIR=/dev/null
-  mongo-seed:
+    networks:
+      - app_net
+  import:
     build: .
+    depends_on:
+      - db
+    environment:
+      MONGO_HOST: db
+      MONGO_PORT: "27017"
+      MONGO_USER: admin
+      MONGO_PASSWORD: admin123
+      MONGO_DB: test
+      MONGO_COLLECTION: restaurants
+      JSON_FILE: /data/restaurants.json
     volumes:
       - ./data:/data
-    links:
-      - db:mongo
-    command: mongorestore --host mongo --db restaurants --drop /data/restaurants.json
-  flask:
+    networks:
+      - app_net
+  api:
     build: ./API
     ports:
       - "5000:5000"
     depends_on:
       - db
+    networks:
+      - app_net
+  frontend:
+    build: ./Frontend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - api
     networks:
       - app_net
 networks:

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Restaurant List</title>
+  </head>
+  <body>
+    <h1>Restaurant List</h1>
+    <ul>
+      {% for restaurant in restaurants %}
+        <li>{{ restaurant.name }} - {{ restaurant.borough }}</li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
+
