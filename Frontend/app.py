@@ -52,7 +52,7 @@ def edit(id):
         return render_template('edit.html', restaurant=restaurant)
 
 
-@app.route('/delete/<id>')
+@app.route('/delete/<id>',methods=['POST'])
 def delete(id):
     r = requests.delete(api_url + '/' + id)
     return redirect('/')

@@ -4,11 +4,11 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 app = Flask(__name__)
-app.config['MONGO_URI'] = 'mongodb://admin:admin123@db:27017/test'  # Replace with your own URI
+app.config['MONGO_URI'] = 'mongodb://admin:admin123@db:27017'  # Replace with your own URI
 api = Api(app)
 client = MongoClient(app.config['MONGO_URI'])
-db = client.get_default_database()
-restaurants = db.restaurants
+db =  client['test']
+restaurants = db['restaurants']
 
 
 class RestaurantList(Resource):
@@ -18,7 +18,10 @@ class RestaurantList(Resource):
         for restaurant in cursor:
             restaurant['_id'] = str(restaurant['_id'])
             result.append(restaurant)
+            if len(result) == 1000:
+                break
         return jsonify({'restaurants': result})
+
 
     def post(self):
         data = request.json
