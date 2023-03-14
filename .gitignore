@@ -19,3 +19,4 @@ API/.idea/sonarlint/issuestore/1/3/13cce7fd076299c81b4986166f3d822791c9490e
 *.xml
 data/storage.bson
 data/WiredTiger
+*.pyc
