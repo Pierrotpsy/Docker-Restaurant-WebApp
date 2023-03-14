@@ -5,7 +5,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ./data:/data/db
+      - mongo_data:/data/db
     command: mongod --bind_ip_all --auth
     environment:
       - MONGO_INITDB_DATABASE=test
@@ -16,7 +16,7 @@ services:
     networks:
       - back_net
   import:
-    build: .
+    build: ./Import
     depends_on:
       - db
     environment:
@@ -48,8 +48,16 @@ services:
       - backend
     networks:
       - front_net
+    volumes:
+      - type: bind
+        source: ./Frontend
+        target: /app
+
 networks:
   back_net:
     driver: bridge
   front_net:
     driver: bridge
+
+volumes:
+  mongo_data:
