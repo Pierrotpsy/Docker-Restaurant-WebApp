@@ -1,24 +1,42 @@
 version: '3'
+# The services object lists all the containers which make up the final docker app.
 services:
+  # The 'db' service is used to store data. It hosts a mongodb local instance.
   db:
+    # This service is built upon the Dockerhub official mongo image.
     image: mongo
+    # By default, mongodb uses port 27017. Here we map both our host port and container port 27017 together.
     ports:
       - "27017:27017"
+    # To make the database persistent, we store the database data in a docker volume named 'mongo_data'
+    # which is created in the 'volumes' object
     volumes:
       - mongo_data:/data/db
+    # Here we start the MongoDb daemon, enable authentication to ensure that only authenticated clients
+    # can access the database and bind all IP addresses so that it can accept connections from any IP address.
     command: mongod --bind_ip_all --auth
+    # Here we configure important MongoDB information, such as the database name, the root credentials,
+    # the directory where the data will be stored, and the directory where the logs will be stored.
     environment:
       - MONGO_INITDB_DATABASE=test
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=admin123
       - MONGO_DATA_DIR=/data/db
       - MONGO_LOG_DIR=/dev/null
+    # Here we indicate that the service uses the 'back_net' docker network which is created in the 'networks'
+    # object. This will allow the service to communicate with other services on the same network.
     networks:
       - back_net
+  # The 'import' service is used to seed the initial MongoDB instance. In our case we use sample data from the
+  # MongoDB Atlas Sample Datasets.
   import:
+    # The image for this service is provided by a Dockerfile in the indicated directory.
     build: ./Import
+    # This service won't run before the 'db' service is operational.
     depends_on:
       - db
+    # Here we configure important MongoDB information to allow us to connect to the database, as well
+    # as what our initial data is.
     environment:
       MONGO_HOST: db
       MONGO_PORT: "27017"
@@ -27,37 +45,61 @@ services:
       MONGO_DB: test
       MONGO_COLLECTION: restaurants
       JSON_FILE: /data/restaurants.json
+    # We mount the 'data' directory to a 'data' directory in our container to access the json files we need to import.
     volumes:
       - ./data:/data
+    # Here we indicate that the service uses the 'back_net' docker network which is created in the 'networks'
+    # object. This will allow the service to communicate with other services on the same network. In this case,
+    # we need the 'import' service to communicate with the 'db' service to import the seed data.
     networks:
       - back_net
+  # The 'backend' service is an API used to manage requests from the frontend and communicate with the database.
   backend:
+    # The image for this service is provided by a Dockerfile in the indicated directory.
     build: ./API
+    # For the service to properly work, we need to communicate with it. We will be using port 5000 both
+    # on our host and our container.
     ports:
       - "5000:5000"
+    # The service won't run before the 'db' service is operational.
     depends_on:
       - db
+    # This service is connected to two networks, which are created in the 'networks' object at the end of the file.
+    # It needs to be connected to the 'back_net' network to communicate with the database and with the 'front_net'
+    # network to communicate with the front end service.
+    # Using two separate networks to achieve this ensures that all requests to the database have to go through the API.
     networks:
       - back_net
       - front_net
+  # The 'frontend' service is used as a user interface to interact with the database.
   frontend:
+    # The image for this service is provided by a Dockerfile in the provided directory.
     build: ./Frontend
+    # For the service to properly work, we map port 8000 on our host and our container.
     ports:
       - "8000:8000"
+    # The service won't run unless the 'backend' service is up and running.
     depends_on:
       - backend
+    # To communicate with the 'backend' service, the 'frontend' service is connected to the same docker network.
     networks:
       - front_net
+    # For easier development, we create a bind mount between the frontend files and the app directory of the
+    # container. This allows us to modify files and directly see our changes without having to stop and relaunch
+    # the application with docker compose.
     volumes:
       - type: bind
         source: ./Frontend
         target: /app
 
+# Here we create the networks we are using for our webapp. As explained before, we need both a 'front_net'
+# and 'back_net' network, which are of the bridge type (default docker networking mode).
 networks:
   back_net:
     driver: bridge
   front_net:
     driver: bridge
 
+# Here we define our volumes for the project. We only need one, 'mongo_data'.
 volumes:
   mongo_data:
