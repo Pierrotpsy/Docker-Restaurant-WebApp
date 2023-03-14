@@ -8,18 +8,22 @@ app = Flask(__name__, template_folder='templates')
 
 api_url = 'http://backend:5000/restaurants'
 
+
 def avg_grade(grades):
     total_score = 0
     for grade in grades:
         total_score += grade['score']
     return round(total_score / len(grades), 1)
 
+
 def timestampformat(timestamp):
     tz = timezone('Europe/Paris')
     dt = datetime.fromtimestamp(timestamp / 1000, tz)
     return dt.strftime('%d/%m/%Y')
 
+
 app.jinja_env.filters['timestampformat'] = timestampformat
+
 
 @app.route('/')
 def index():
@@ -56,6 +60,7 @@ def details(id):
     restaurant['rating'] = avg_grade(restaurant['grades'])
     return render_template('detail.html', restaurant=restaurant)
 
+
 @app.route('/edit/<id>', methods=['GET', 'POST'])
 def edit(id):
     if request.method == 'POST':
@@ -68,7 +73,7 @@ def edit(id):
         data['address']['building'] = request.form['building']
         data['address']['zipcode'] = request.form['zipcode']
         data['address']['coord'] = [float(request.form['longitude']), float(request.form['latitude'])]
-        r = requests.put(api_url + '/' + id, json=data)
+        requests.put(api_url + '/' + id, json=data)
         return redirect('/')
     else:
         r = requests.get(api_url + '/' + id)
@@ -76,7 +81,7 @@ def edit(id):
         return render_template('edit.html', restaurant=restaurant)
 
 
-@app.route('/delete/<id>',methods=['POST'])
+@app.route('/delete/<id>', methods=['POST'])
 def delete(id):
     r = requests.delete(api_url + '/' + id)
     return redirect('/')

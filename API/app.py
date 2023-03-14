@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.config['MONGO_URI'] = 'mongodb://admin:admin123@db:27017'  # Replace with your own URI
 api = Api(app)
 client = MongoClient(app.config['MONGO_URI'])
-db =  client['test']
+db = client['test']
 restaurants = db['restaurants']
 
 
@@ -21,7 +21,6 @@ class RestaurantList(Resource):
             if len(result) == 1000:
                 break
         return jsonify({'restaurants': result})
-
 
     def post(self):
         data = request.json
@@ -43,7 +42,6 @@ class Restaurant(Resource):
         if result.modified_count == 0:
             return '', 404
         return '', 204
-
 
     def delete(self, id):
         result = restaurants.delete_one({'_id': ObjectId(id)})
