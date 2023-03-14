@@ -34,13 +34,13 @@ Restaurant List
 
 {% block content %}
 <div class="container">
-  <h1>Restaurant List</h1>
+  <h1></h1>
   <div class="restaurant-list">
     {% for restaurant in restaurants %}
     <div class="restaurant">
       <div>
         <h2>{{ restaurant['name'] }}</h2>
-        <p>Address: {{ restaurant['address']['street'] }}, {{ restaurant['address']['city'] }}, {{ restaurant['address']['state'] }}</p>
+        <p>Address: {{ restaurant['address']['building'] }} {{ restaurant['address']['street'] }}, {{ restaurant['borough'] }}, {{ restaurant['address']['zipcode'] }}</p>
         <p>Cuisine: {{ restaurant['cuisine'] }}</p>
         <p>Rating: {{ restaurant['rating'] }} <a href="{{ url_for('details', id=restaurant['_id']) }}">View more</a></p>
       </div>

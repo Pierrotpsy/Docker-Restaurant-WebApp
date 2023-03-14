@@ -51,7 +51,7 @@ Grades for {{ restaurant['name'] }}
 <div class="container">
   <h1>Grades for {{ restaurant['name'] }}</h1>
   <div class="restaurant-info">
-    <p>Address: {{ restaurant['address']['street'] }}, {{ restaurant['city'] }}, {{ restaurant['address']['state'] }}</p>
+    <p>Address: {{ restaurant['address']['building'] }} {{ restaurant['address']['street'] }}, {{ restaurant['borough'] }}, {{ restaurant['address']['zipcode'] }}</p>
     <p>Cuisine: {{ restaurant['cuisine'] }}</p>
     <p>Rating: {{ restaurant['rating'] }}</p>
 

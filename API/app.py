@@ -39,10 +39,11 @@ class Restaurant(Resource):
 
     def put(self, id):
         data = request.json
-        result = restaurants.replace_one({'_id': ObjectId(id)}, data)
+        result = restaurants.update_one({'_id': ObjectId(id)}, {'$set': data})
         if result.modified_count == 0:
             return '', 404
         return '', 204
+
 
     def delete(self, id):
         result = restaurants.delete_one({'_id': ObjectId(id)})
@@ -55,4 +56,4 @@ api.add_resource(RestaurantList, '/restaurants')
 api.add_resource(Restaurant, '/restaurants/<string:id>')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)
