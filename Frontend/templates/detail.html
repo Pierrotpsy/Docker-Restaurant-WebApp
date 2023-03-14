@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}
+Grades for {{ restaurant['name'] }}
+{% endblock %}
+
+{% block head %}
+{{ super() }}
+<style>
+  h1 {
+    text-align: center;
+    margin-top: 50px;
+  }
+  .restaurant-info {
+    margin-top: 30px;
+    border: 1px solid black;
+    padding: 10px;
+  }
+  .restaurant-info p {
+    margin: 5px;
+  }
+  table {
+    margin-top: 30px;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+  }
+  th {
+    background-color: #ddd;
+  }
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  .btn-group {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+  }
+  .btn-group button {
+    margin-right: 10px;
+  }
+</style>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container">
+  <h1>Grades for {{ restaurant['name'] }}</h1>
+  <div class="restaurant-info">
+    <p>Address: {{ restaurant['address']['street'] }}, {{ restaurant['city'] }}, {{ restaurant['address']['state'] }}</p>
+    <p>Cuisine: {{ restaurant['cuisine'] }}</p>
+    <p>Rating: {{ restaurant['rating'] }}</p>
+
+  </div>
+  <table>
+    <thead>
+    <tr>
+      <th>Date</th>
+      <th>Grade</th>
+      <th>Score</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for review in restaurant['grades'] %}
+    <tr>
+      <td>{{ review['date'] }}</td>
+      <td>{{ review['grade'] }}</td>
+      <td>{{ review['score'] }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <div class="btn-group">
+    <form method="GET" action="{{ url_for('edit', id=restaurant['_id']) }}">
+      <button class="btn btn-primary edit-restaurant">Edit</button>
+    </form>
+    <form method="POST" action="{{ url_for('delete', id=restaurant['_id']) }}">
+      <button class="btn btn-danger delete-restaurant">Delete</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
