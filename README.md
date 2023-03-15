@@ -48,9 +48,15 @@ This will create the images needed for the app and install all dependencies.
 
 To launch the app itself, run:
 ```shell
-docker compose up
+docker compose up -d
 ```
 
 You should be able to access the app on `localhost:8000`, `127.0.0.1:8000`, `192.168.0.3:8000`.
 
 ## Additional information
+
+To stop the app, simply run:
+
+```shell
+docker compose down
+```
