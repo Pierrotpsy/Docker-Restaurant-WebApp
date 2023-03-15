@@ -5,9 +5,6 @@ services:
   db:
     # This service is built upon the Dockerhub official mongo image.
     image: mongo
-    # By default, mongodb uses port 27017. Here we map both our host port and container port 27017 together.
-    ports:
-      - "27017:27017"
     # To make the database persistent, we store the database data in a docker volume named 'mongo_data'
     # which is created in the 'volumes' object
     volumes:
@@ -57,10 +54,6 @@ services:
   backend:
     # The image for this service is provided by a Dockerfile in the indicated directory.
     build: ./API
-    # For the service to properly work, we need to communicate with it. We will be using port 5000 both
-    # on our host and our container.
-    ports:
-      - "5000:5000"
     # The service won't run before the 'db' service is operational.
     depends_on:
       - db
@@ -75,7 +68,8 @@ services:
   frontend:
     # The image for this service is provided by a Dockerfile in the provided directory.
     build: ./Frontend
-    # For the service to properly work, we map port 8000 on our host and our container.
+    # For the service to properly work, we need to communicate with it. We will be using port 8000 both
+    # on our host and our container.
     ports:
       - "8000:8000"
     # The service won't run unless the 'backend' service is up and running.
